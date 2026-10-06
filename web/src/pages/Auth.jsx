@@ -27,6 +27,8 @@ export function Login() {
   const [f, setF] = useState({ email: '', password: '' });
   useEffect(() => { if (user) nav(loc.state?.from || '/home', { replace: true }); }, [user, nav, loc.state]);
   const demo = (email) => setF({ email, password: 'demo-bottle-2026' });
+  // demo / dev builds open with the Alice account already filled in, so it's one click to sign in
+  useEffect(() => { if (config?.dev) setF((cur) => (cur.email || cur.password ? cur : { email: 'alice@demo.test', password: 'demo-bottle-2026' })); }, [config?.dev]);
   return (
     <div className="auth2">
       <form className="auth2-form" onSubmit={(e) => { e.preventDefault(); run(async () => { await login(f.email, f.password); nav(loc.state?.from || '/home', { replace: true }); }); }}>
