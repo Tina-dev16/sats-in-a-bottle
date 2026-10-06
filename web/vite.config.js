@@ -7,6 +7,6 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   root: here,
   plugins: [react()],
-  server: { port: 5173, strictPort: true, proxy: { '/api': { target: 'http://localhost:3001' } } },
+  server: { fs: { allow: ['..'] }, port: 5173, strictPort: true, proxy: { '/api': { target: 'http://localhost:3001' } } },
   build: { outDir: path.join(here, 'dist'), emptyOutDir: true, sourcemap: false, assetsInlineLimit: 0, chunkSizeWarningLimit: 900 },
 });

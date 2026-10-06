@@ -30,6 +30,14 @@ mainnet or with a real payment provider. Demo sign-in: `alice@demo.test` (sender
 (recipient), password `demo-bottle-2026`. The free plan sleeps when idle and resets its data on redeploy.
 Anyone with the URL can sign in as the demo users, so don't put anything real in it.
 
+## Static demo (no server)
+
+`npm run build:static` builds a copy of the app where the API runs inside the browser (`web/src/lib/mockApi.js`,
+state in localStorage), so it works on any static host such as Surge or GitHub Pages. It is a simulation for demos:
+demo accounts, simulated payments, nothing real, and no encryption. Deploy with
+`cp web/dist-static/index.html web/dist-static/200.html && surge web/dist-static <your-domain>.surge.sh`.
+Each visitor gets their own private copy of the data in their own browser.
+
 ## Layout
 
 | Path | What |

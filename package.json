@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "node scripts/dev.js",
     "build": "vite build --config web/vite.config.js",
+    "build:static": "VITE_STATIC_DEMO=true vite build --config web/vite.config.js --outDir dist-static",
     "start": "NODE_ENV=production node --no-warnings server/index.js",
     "test": "NODE_ENV=test MIN_LOCK_SECONDS=1 PAYMENT_WEBHOOK_SECRET=test-webhook-secret-test-webhook-secret node --no-warnings --test server/test/*.test.js"
   },

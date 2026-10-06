@@ -175,6 +175,7 @@ function SealPanel({ b, reload, onEdit }) {
 }
 
 function Locked({ b, reload, sender }) {
+  const { config } = useAuth();
   const { busy, error, run } = useAsync();
   const [confirm, setConfirm] = useState(false);
   const timer = useRef();
@@ -196,6 +197,7 @@ function Locked({ b, reload, sender }) {
         <p className="muted">{sender ? 'Only you can release it.' : `${b.senderName} releases it.`}</p>
         {sender && <button className="btn btn-light" onClick={() => setConfirm(true)}>Milestone reached, release the bottle</button>}
       </>}
+      {config?.dev && date && sender && <button className="btn btn-mint btn-sm" onClick={async () => { await post(`/dev/bottles/${b.id}/fast-forward`); reload(); }}>Dev: open this bottle now</button>}
       <hr className="divider" style={{ background: 'var(--color-graphite)' }} />
       <div className="row between wrap-r"><span><b>{fmtSats(b.amountSats)} sats</b> locked</span><span className="muted">Message hidden</span></div>
       {!sender && b.attachmentKinds?.length > 0 && <div className="row wrap-r">{b.attachmentKinds.map((k) => <span key={k} className="tag gray">{k === 'voice' ? 'A voice note' : 'A photo'} inside</span>)}</div>}
@@ -295,7 +297,7 @@ function RecipientPanels({ b, reload }) {
 function Reveal({ b, reload }) {
   const [claim, setClaim] = useState(false);
   const photo = b.attachments?.find((a) => a.kind === 'photo'), voice = b.attachments?.find((a) => a.kind === 'voice');
-  const url = (a) => `/api/bottles/${b.id}/attachments/${a.id}`;
+  const url = (a) => a.url || `/api/bottles/${b.id}/attachments/${a.id}`;
   return (<>
     <div className="stack">
       <span className="tag yellow">From {b.senderName}</span>

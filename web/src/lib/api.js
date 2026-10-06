@@ -5,7 +5,13 @@ export class ApiError extends Error {
   constructor(status, body) { super(body?.error || 'Request failed'); this.status = status; this.field = body?.field; this.code = body?.code; this.body = body; }
 }
 
+const STATIC_DEMO = import.meta.env.VITE_STATIC_DEMO === 'true';
+
 export async function api(method, path, body) {
+  if (STATIC_DEMO) { // static demo build: the API runs inside the browser (see mockApi.js)
+    try { return await (await import('./mockApi.js')).handle(method, path, body); }
+    catch (e) { if (e?.mock) throw new ApiError(e.status, e.body); throw e; }
+  }
   const headers = {};
   let payload;
   if (body instanceof FormData) payload = body;
