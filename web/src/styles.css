@@ -339,3 +339,7 @@ html { scroll-padding-top: 72px; }
 }
 @media (max-width: 380px) { .logo span { display: none; } }
 @media (max-width: 800px) { .trio .spin { transform: scale(.7); transform-origin: 0 0; width: calc(var(--box) * .7); height: calc(var(--box) * .7); margin-bottom: 8px; } .trio .h-col { margin-top: 8px; } }
+
+/* shown while the 3D scene downloads, and as the fallback if WebGL is unavailable */
+.bottle-placeholder { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.bob { animation: bob 3s ease-in-out infinite; } @keyframes bob { 50% { transform: translateY(-10px) rotate(2deg); } }

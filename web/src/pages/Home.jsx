@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { get } from '../lib/api.js';
 import { useAuth } from '../lib/auth.jsx';
-import BottleCanvas from '../components/BottleCanvas.jsx';
+import PoppingCanvas from '../components/PoppingCanvas.jsx';
 import { Blocks, INK, MINT, YEL } from '../components/Blocks.jsx';
 import { Loading, StatusTag } from '../components/ui.jsx';
 import { fmtSats, fmtDate, humanLeft } from '../lib/format.js';
@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <>
       <section className="hero dash">
-        <div className="hero-art"><BottleCanvas progress={1} zoom={0.84} /></div>
+        <div className="hero-art"><PoppingCanvas zoom={0.84} /></div>
         <div className="hero-copy">
           <h1 className="h-hero"><span>Hi,</span><span>{user.name.split(' ')[0]}.</span></h1>
           <div className="dash-cta">

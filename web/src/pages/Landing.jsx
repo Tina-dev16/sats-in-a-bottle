@@ -29,9 +29,8 @@ export default function Landing() {
   const finish = useCallback(() => setDone(true), []);
 
   useEffect(() => { // build the bottle (scroll locked), then loop: open, rewind, build again
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) { finish(); return; }
-    const skipIntro = !!window.location.hash || window.scrollY > 200; // arriving at a section link: no intro
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; // still animates (it is decorative), just never locks scrolling
+    const skipIntro = reduced || !!window.location.hash || window.scrollY > 200; // arriving at a section link: no intro
     let start = performance.now() + 500, phase = skipIntro ? 'hold' : 'intro', skipped = false;
     if (skipIntro) {
       finish();
@@ -80,7 +79,7 @@ export default function Landing() {
       <Nav />
       <section className="hero">
         <div className="hero-art">
-          <BottleCanvas progress={0} offset={0} zoom={0.84} onReady={(s) => { sceneRef.current = s; s.jumpTo(window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 0); }} />
+          <BottleCanvas progress={0} offset={0} zoom={0.84} onReady={(s) => { sceneRef.current = s; s.jumpTo(window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.location.hash || window.scrollY > 200 ? 1 : 0); }} />
         </div>
         <div className="hero-copy">
           <h1 className="h-hero">

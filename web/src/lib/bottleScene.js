@@ -77,7 +77,9 @@ function bottleGeometry() {
 
 export function createBottleScene(canvas, { reducedMotion = false } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // Phones: lighter rendering (lower pixel ratio, no transmission pass) so it stays smooth on mobile GPUs.
+  const lite = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 700;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.88;
   renderer.setClearColor(CANVAS, 0);
@@ -109,7 +111,8 @@ export function createBottleScene(canvas, { reducedMotion = false } = {}) {
 
   // --- bottle
   const bottle = new THREE.Group(); root.add(bottle);
-  const glass = track(new THREE.MeshPhysicalMaterial({
+  const glassLite = new THREE.MeshPhysicalMaterial({ color: 0x8fdba7, roughness: 0.08, metalness: 0, transmission: 0, transparent: true, opacity: 0.5, envMapIntensity: 0.7, clearcoat: 1, clearcoatRoughness: 0.04, side: THREE.DoubleSide });
+  const glass = track(lite ? glassLite : new THREE.MeshPhysicalMaterial({
     color: 0xdff7e6, roughness: 0.03, metalness: 0, transmission: 1, thickness: 0.7, ior: 1.46,
     attenuationColor: new THREE.Color(0x8fdba7), attenuationDistance: 3.4, specularIntensity: 1, envMapIntensity: 1.0, side: THREE.DoubleSide, clearcoat: 1, clearcoatRoughness: 0.03,
   }));

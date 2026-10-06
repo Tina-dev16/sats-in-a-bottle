@@ -2,18 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { get, post } from '../lib/api.js';
 import { useAuth } from '../lib/auth.jsx';
-import BottleCanvas from '../components/BottleCanvas.jsx';
+import PoppingCanvas from '../components/PoppingCanvas.jsx';
 import { Spinner, useAsync } from '../components/ui.jsx';
 
-/** The bottle sits sealed, then pops its cork every few seconds. */
 function PoppingBottle() {
-  const [open, setOpen] = useState(0);
-  useEffect(() => {
-    let t1, t2; const cycle = () => { setOpen(1); t1 = setTimeout(() => setOpen(0), 2600); t2 = setTimeout(cycle, 6200); };
-    t2 = setTimeout(cycle, 1400);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
-  return <div className="auth2-art"><BottleCanvas progress={1} open={open} zoom={0.9} /></div>;
+  return <div className="auth2-art"><PoppingCanvas zoom={0.9} /></div>;
 }
 
 function Field({ label, ...p }) {
