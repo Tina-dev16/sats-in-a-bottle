@@ -1,0 +1,19 @@
+# One-click demo host: Render > New > Blueprint > pick this repo.
+# Simulated Bitcoin only. The free plan sleeps when idle and loses data on redeploy; the demo accounts reseed on boot.
+services:
+  - type: web
+    name: sats-in-a-bottle
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DEMO_MODE
+        value: "true"
+      - key: BTC_NETWORK
+        value: testnet
+      - key: TRUST_PROXY
+        value: "1"
+      - key: SIB_MASTER_KEY
+        generateValue: true

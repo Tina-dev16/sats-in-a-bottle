@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import express, { Router } from 'express';
 import { z } from 'zod';
-import { config, isProd } from './config.js';
+import { config, devTools } from './config.js';
 import { get, all, run } from './db.js';
 import { safeEqual } from './crypto.js';
 import { audit, verifyAuditChain } from './audit.js';
@@ -16,7 +16,7 @@ export const devRouter = Router();
 webhookRouter.get('/health', (_req, res) => res.json({
   ok: true, network: config.network, simulated: config.paymentProvider === 'mock',
   limits: { minSats: config.limits.minSats, maxSats: config.limits.maxSats, minLockSeconds: config.limits.minLockSeconds, messageChars: config.limits.messageChars },
-  dev: !isProd,
+  dev: devTools,
 }));
 
 /**
@@ -36,7 +36,7 @@ webhookRouter.post('/webhooks/payments', express.raw({ type: 'application/json',
   res.json({ ok: true, ...r });
 }));
 
-if (!isProd) {
+if (devTools) {
   // ---- DEV / DEMO ONLY: these routes do not exist in production builds -------------------------
   devRouter.get('/dev/outbox', wrap(async (req, res) => {
     const email = String(req.query.email || '').toLowerCase();

@@ -21,6 +21,15 @@ Node ≥ 22.13 (uses built-in `node:sqlite`; no native modules).
 > **Status: working product on a simulated Bitcoin network.** Everything except real money movement is
 > production-grade. Read [docs/PRODUCTION.md](docs/PRODUCTION.md) before wiring real funds.
 
+## Hosted demo for the team
+
+`render.yaml` deploys a demo on Render (Render > New > Blueprint > pick this repo). It runs with `DEMO_MODE=true`:
+production hardening stays on (HTTPS cookies, CSP, rate limits), and the seeded accounts, the simulate-payment
+button and the dev inbox are available. Simulated Bitcoin only: the server refuses to start in demo mode on
+mainnet or with a real payment provider. Demo sign-in: `alice@demo.test` (sender) and `bob@demo.test`
+(recipient), password `demo-bottle-2026`. The free plan sleeps when idle and resets its data on redeploy.
+Anyone with the URL can sign in as the demo users, so don't put anything real in it.
+
 ## Layout
 
 | Path | What |
