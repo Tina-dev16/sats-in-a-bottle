@@ -1,0 +1,12 @@
+# Where this build differs from the brief, and why
+
+1. **Custody model (most important).** The brief says funds "cannot be claimed before the condition". With a normal app wallet that is a promise by *our server*. The trustless version is a **time-locked Bitcoin script** (a Taproot/CLTV escrow: recipient can spend after `unlock_at`, sender can refund after the claim window), the chain itself enforces the lock. That is the right v2 for date-based bottles (it cannot cover Lightning, nor milestone conditions). v1 here is custodial + server-enforced, with a **per-bottle cap (5,000,000 sats)** to limit blast radius.
+2. **Recipient identity = verified email only.** The brief allows "email/wallet". A wallet address as the *recipient identity* can't be verified or recovered and invites fat-finger loss. Instead the recipient adds their wallet **at claim time**, and it's checksum-validated.
+3. **"Sealed" and "locked" are one state.** The brief lists both; they are never different in practice. Statuses: Draft → Funded → Sealed → Ready → Claimed (+ Refunded/Cancelled).
+4. **Fund before seal** (the brief's flow lists Seal after Add Bitcoin, but payment must confirm first). Sealing is the irreversible step; until then the sender can edit the message or take the sats back.
+5. **Milestones are sender-attested.** "Goal/condition" can't be verified by software. Only the sender can release a milestone bottle, and the UI says so plainly. Optional v2: a named third-party "witness" who must co-sign.
+6. **Refund paths added**, funded-but-never-sealed, and unclaimed after a 365-day claim window, otherwise a typo'd recipient email would lock sats forever.
+7. **Message visibility.** Hidden from the recipient until unlock. The sender can always re-read their own message (it's theirs); both are encrypted at rest.
+8. **Lightning claims must be exact-amount invoices**; on-chain claims are native SegWit/Taproot only. Both are validated before payout.
+9. **Added:** email verification, account lockout, change-password, audit log, per-bottle caps, 24h unlock reminders, voice recording in-browser, EXIF stripping.
+10. **Product ideas worth considering next:** recurring bottles ("a bottle every birthday until 18"); a sender-set "claim PIN" delivered out of band; group/gift bottles; passkeys; fiat value display with a clear volatility notice; a public "time capsule" gallery (opt-in, no amounts).
