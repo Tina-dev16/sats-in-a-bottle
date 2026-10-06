@@ -68,7 +68,7 @@ function Hero({ b, revealed }) {
   const [open, setOpen] = useState(0);
   useEffect(() => { if (!revealed) return setOpen(0); const t = setTimeout(() => setOpen(1), 700); return () => clearTimeout(t); }, [revealed]);
   return (
-    <div className="hero-bottle" style={{ minHeight: 480, position: 'sticky', top: 16 }}>
+    <div className="hero-bottle bv-hero">
       <BottleCanvas zoom={0.88} progress={STAGE[b.status] ?? 1} open={open} label={revealed ? 'The bottle has opened' : `A ${b.status} bottle`} />
       <div style={{ position: 'absolute', left: 20, bottom: 20 }} className="tag dark">{fmtSats(b.amountSats)} sats</div>
     </div>

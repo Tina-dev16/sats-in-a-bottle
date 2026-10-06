@@ -17,6 +17,9 @@ export function Nav() {
   const loc = useLocation();
   const [dark, setDark] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [menu, setMenu] = useState(false);
+  useEffect(() => { setMenu(false); }, [loc.pathname, loc.hash]);
+  useEffect(() => { document.body.style.overflow = menu ? 'hidden' : ''; return () => { document.body.style.overflow = ''; }; }, [menu]);
   const [unread, setUnread] = useState(0);
   useEffect(() => { if (user) get('/activity').then((r) => setUnread(r.unread)).catch(() => {}); }, [user, loc.pathname]);
   useEffect(() => { // header turns dark/yellow while it floats over a black section
@@ -42,7 +45,20 @@ export function Nav() {
           <a href="/#how">How it works</a><a href="/#security">Security</a><a href="/#ideas">Ideas</a><Link to="/login">Sign in</Link>
         </nav>
       )}
-      <Link to={user ? '/bottles/new' : '/register'} className="hdr-cta">{user ? 'Create a bottle' : 'Create a bottle'}</Link>
+      <div className="hdr-right">
+        <Link to={user ? '/bottles/new' : '/register'} className="hdr-cta">Create a bottle</Link>
+        <button className="burger" aria-label={menu ? 'Close menu' : 'Open menu'} aria-expanded={menu} onClick={() => setMenu((m) => !m)}><i /><i /></button>
+      </div>
+      {menu && (
+        <nav className="mnav" aria-label="Menu">
+          {user ? (<>
+            <NavLink to="/home" end>Home</NavLink><NavLink to="/bottles">Bottles</NavLink><NavLink to="/activity">Activity{unread > 0 ? ` (${unread})` : ''}</NavLink><NavLink to="/transactions">Transactions</NavLink>
+            <a href="/" onClick={async (e) => { e.preventDefault(); setMenu(false); await logout(); nav('/'); }}>Sign out</a>
+          </>) : (<>
+            <a href="/#how" onClick={() => setMenu(false)}>How it works</a><a href="/#security" onClick={() => setMenu(false)}>Security</a><a href="/#ideas" onClick={() => setMenu(false)}>Ideas</a><Link to="/login">Sign in</Link>
+          </>)}
+        </nav>
+      )}
     </header>
   );
 }
